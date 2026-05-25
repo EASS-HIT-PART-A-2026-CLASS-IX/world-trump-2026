@@ -1,184 +1,160 @@
 import { useState, useEffect } from 'react'
 import { fetchAPI } from './_app'
 
-const ASCII_BANNER = `
- __     __         _     _   _____                           ____   ___   ___   ___
- \\ \\   / /__  _ __| | __| | |_   _|_ __ _ __ ___  _ __     |___ \\ / _ \\ / _ \\ / _ \\
-  \\ \\ / / _ \\| '__| |/ _\` |   | | | '__| '_ \` _ \\| '_ \\ _____ __) | | | | | | | | |
-   \\ \\ / (_) | |  | | (_| |   | | | |  | | | | | | |_) |_____/ __/| |_| | |_| | |_| |
-    \\_/ \\___/|_|  |_|\\__,_|   |_| |_|  |_| |_| |_| .__/     |_____|\\___/ \\___/ \\___/
-                                                  |_|
-`
-
-export default function Home({ hackerMode }: { hackerMode: boolean }) {
+export default function Home({ trumpMode }: { trumpMode: boolean }) {
   const [teams, setTeams] = useState<any[]>([])
   const [matches, setMatches] = useState<any[]>([])
   const [usa250, setUsa250] = useState<any>(null)
   const [quotes, setQuotes] = useState<string[]>([])
   const [error, setError] = useState('')
-  const [booted, setBooted] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setBooted(true), 200)
-    Promise.all([
-      fetchAPI('teams'),
-      fetchAPI('matches?stage=group'),
-      fetchAPI('usa250'),
-      fetchAPI('trump-quotes'),
-    ]).then(([t, m, u, q]) => {
-      setTeams(t.teams || [])
-      setMatches(m.matches || [])
-      setUsa250(u)
-      setQuotes(q.quotes || [])
-    }).catch(e => setError(e.message))
-    return () => clearTimeout(timer)
+    Promise.all([fetchAPI('teams'), fetchAPI('matches?stage=group'), fetchAPI('usa250'), fetchAPI('trump-quotes')])
+      .then(([t, m, u, q]) => { setTeams(t.teams||[]); setMatches(m.matches||[]); setUsa250(u); setQuotes(q.quotes||[]) })
+      .catch(e => setError(e.message))
   }, [])
 
-  const c = hackerMode ? { text: '#ffb000', dim: '#664400', accent: '#ff3333', bg: '#0a0000' } : { text: '#00cc44', dim: '#006622', accent: '#00cc44', bg: '#0a0a0a' }
-
   return (
-    <div style={{ background: c.bg, minHeight: 'calc(100vh - 40px)', paddingBottom: 24 }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
-
-        <pre style={{ color: c.dim, fontSize: 8, lineHeight: '9px', margin: '16px 0', overflow: 'hidden' }}>
-          {ASCII_BANNER}
-        </pre>
-
-        <div style={{ color: c.dim, fontSize: 11, marginBottom: 8 }}>
-          <span style={{ color: c.text }}>$</span> ./world-trump-2026 --fifa-wc --usa250 --polymarket
+    <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', paddingBottom: 40 }}>
+      <div className="pm-container">
+        <div style={{ padding: '20px 0 12px' }}>
+          <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px', background: trumpMode ? 'linear-gradient(135deg, #FFD700, #F5A623)' : 'linear-gradient(135deg, #4B7BF5, #00D4AA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            World Cup 2026 Markets
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>
+            June 11 – July 19 · 48 teams · 16 venues · 104 matches
+          </p>
         </div>
 
-        <div style={{ color: c.text, fontSize: 11, marginBottom: 24 }}>
-          {booted ? (
-            <>
-              <span style={{ color: c.text }}>▸</span> boot: 48 teams loaded · 16 venues · 104 matches · 6 markets
-              <br />
-              <span style={{ color: c.text }}>▸</span> kernel: June 11 → July 19 · USA · CAN · MEX
-              <span className="cursor-blink" style={{ width: 8, height: 13, marginLeft: 4 }} />
-            </>
-          ) : (
-            <><span style={{ color: c.text }}>▸</span> booting...<span className="cursor-blink" style={{ width: 8, height: 13 }} /></>
-          )}
-        </div>
+        {error && <div className="pm-card" style={{ marginBottom: 16, borderColor: 'var(--red)', color: 'var(--red)', fontSize: 13 }}>Error: {error}</div>}
 
-        {error && (
-          <div style={{ border: '1px solid #ff3333', padding: '8px 12px', marginBottom: 16, color: '#ff3333', fontSize: 12 }}>
-            [ERROR] {error}
-          </div>
-        )}
-
-        <div style={{ borderTop: '1px solid #1a3a1a', borderBottom: '1px solid #1a3a1a', background: '#080c08', padding: '6px 0', marginBottom: 20, overflow: 'hidden' }}>
-          <div style={{ animation: 'marquee 35s linear infinite', whiteSpace: 'nowrap', color: c.dim, fontSize: 11 }}>
-            {quotes.length > 0 ? quotes.join(' │ ') : '> INIT: President Trump welcomes the world to the GREATEST World Cup │ 250 years of American greatness │ MAKE SOCCER GREAT AGAIN │ USA! USA! USA!'}
+        <div className="pm-ticker" style={{ marginBottom: 20 }}>
+          <div className="pm-ticker-inner">
+            {quotes.length > 0 ? quotes.join('  ·  ') : 'President Trump welcomes the world to the GREATEST World Cup · 250 years of American greatness · MAKE SOCCER GREAT AGAIN · USA! USA! USA!'}
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 24 }}>
-          {[
-            { label: 'TEAMS', value: '48', icon: '🌍' },
-            { label: 'VENUES', value: '16', icon: '🏟️' },
-            { label: 'MATCHES', value: '104', icon: '⚽' },
-            { label: 'MARKETS', value: '6', icon: '📊' },
-          ].map(s => (
-            <div key={s.label} className="terminal-card" style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 24, marginBottom: 4 }}>{s.icon}</div>
-              <div style={{ fontSize: 28, fontWeight: 'bold', color: c.text, textShadow: `0 0 10px ${c.text}` }}>{s.value}</div>
-              <div style={{ fontSize: 10, color: c.dim, letterSpacing: 2 }}>{s.label}</div>
-            </div>
-          ))}
+        <div className="pm-grid-3" style={{ marginBottom: 24 }}>
+          <div className="pm-card pm-stat">
+            <div className="pm-stat-value">{teams.length||48}</div>
+            <div className="pm-stat-label">Qualified Teams</div>
+          </div>
+          <div className="pm-card pm-stat">
+            <div className="pm-stat-value">16</div>
+            <div className="pm-stat-label">Venues</div>
+          </div>
+          <div className="pm-card pm-stat">
+            <div className="pm-stat-value">104</div>
+            <div className="pm-stat-label">Total Matches</div>
+          </div>
+          <div className="pm-card pm-stat">
+            <div className="pm-stat-value">6</div>
+            <div className="pm-stat-label">Live Markets</div>
+          </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 16, marginBottom: 24 }}>
-          <div className="terminal-card">
-            <div style={{ fontSize: 12, fontWeight: 'bold', color: c.text, marginBottom: 12, letterSpacing: 1 }}>
-              ╔══ TOURNAMENT WINNER ══╗
+        <div className="pm-grid-2" style={{ marginBottom: 24 }}>
+          <div className="pm-card">
+            <div className="pm-section-title">
+              <span className="pm-badge blue">MARKET</span> Tournament Winner
             </div>
-            {[
-              { team: 'Spain', odds: '+450', pct: 18 },
-              { team: 'France', odds: '+500', pct: 16 },
-              { team: 'England', odds: '+600', pct: 14 },
-              { team: 'Brazil', odds: '+800', pct: 11 },
-              { team: 'Argentina', odds: '+800', pct: 11 },
-              { team: 'Portugal', odds: '+1000', pct: 9 },
-              { team: 'Germany', odds: '+1400', pct: 7 },
-              { team: 'USA', odds: '+6600', pct: 1.5 },
-            ].map((o, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4, fontSize: 12 }}>
-                <span style={{ width: 90, color: '#88cc88', textAlign: 'right' }}>{o.team}</span>
-                <div style={{ flex: 1, height: 4, background: '#0f1a0f' }}>
-                  <div style={{ height: 4, background: c.text, boxShadow: `0 0 6px ${c.text}`, width: `${o.pct * 3.5}%` }} />
+            <div style={{ marginTop: 8 }}>
+              {[
+                { team: 'Spain', odds: '+450', pct: 18, fav: true },
+                { team: 'France', odds: '+500', pct: 16, fav: true },
+                { team: 'England', odds: '+600', pct: 14, fav: true },
+                { team: 'Brazil', odds: '+800', pct: 11 },
+                { team: 'Argentina', odds: '+800', pct: 11 },
+                { team: 'Portugal', odds: '+1000', pct: 9 },
+                { team: 'Germany', odds: '+1400', pct: 7 },
+                { team: 'USA', odds: '+6600', pct: 1.5 },
+              ].map((o, i) => (
+                <div key={i} className="pm-odds-row" style={{ fontSize: 13, cursor: 'pointer' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--bg-hover)'; (e.currentTarget as HTMLElement).style.borderRadius = '6px' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+                >
+                  <span style={{ width: 90, color: 'var(--text-primary)', fontWeight: o.fav ? 600 : 400 }}>{o.team}</span>
+                  <div className="pm-odds-bar">
+                    <div className={`pm-odds-bar-fill ${o.fav ? 'green' : 'blue'}`} style={{ width: `${o.pct * 3.5}%` }} />
+                  </div>
+                  <div className={`pm-price ${o.fav ? 'green' : ''}`} style={{ width: 60, justifyContent: 'center', fontSize: 13 }}>
+                    {o.odds}
+                  </div>
                 </div>
-                <span style={{ width: 55, color: c.text, fontFamily: 'inherit', fontWeight: 'bold', textAlign: 'right' }}>{o.odds}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
-          <div className="terminal-card">
-            <div style={{ fontSize: 12, fontWeight: 'bold', color: '#ffb000', marginBottom: 12, letterSpacing: 1 }}>
-              ╔══ GOLDEN BOOT ══╗
+          <div className="pm-card">
+            <div className="pm-section-title">
+              <span className="pm-badge gold">MARKET</span> Golden Boot
             </div>
-            {[
-              { player: 'K. Mbappe', nation: 'FRA', odds: '+600', pct: 22 },
-              { player: 'H. Kane', nation: 'ENG', odds: '+700', pct: 20 },
-              { player: 'E. Haaland', nation: 'NOR', odds: '+1000', pct: 16 },
-              { player: 'L. Messi', nation: 'ARG', odds: '+1200', pct: 14 },
-              { player: 'L. Yamal', nation: 'ESP', odds: '+1400', pct: 12 },
-              { player: 'C. Ronaldo', nation: 'POR', odds: '+1800', pct: 9 },
-              { player: 'Vinicius Jr', nation: 'BRA', odds: '+2000', pct: 8 },
-              { player: 'C. Pulisic', nation: 'USA', odds: '+10000', pct: 2 },
-            ].map((o, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4, fontSize: 12 }}>
-                <span style={{ width: 90, color: '#88cc88', textAlign: 'right' }}>{o.player}</span>
-                <span style={{ width: 32, fontSize: 10, color: '#006622' }}>{o.nation}</span>
-                <div style={{ flex: 1, height: 4, background: '#1a1a0f' }}>
-                  <div style={{ height: 4, background: '#ffb000', boxShadow: '0 0 6px #ffb000', width: `${o.pct * 3}%` }} />
+            <div style={{ marginTop: 8 }}>
+              {[
+                { player: 'Kylian Mbappe', nation: 'FRA', odds: '+600', pct: 22 },
+                { player: 'Harry Kane', nation: 'ENG', odds: '+700', pct: 20 },
+                { player: 'Erling Haaland', nation: 'NOR', odds: '+1000', pct: 16 },
+                { player: 'Lionel Messi', nation: 'ARG', odds: '+1200', pct: 14 },
+                { player: 'Lamine Yamal', nation: 'ESP', odds: '+1400', pct: 12 },
+                { player: 'Cristiano Ronaldo', nation: 'POR', odds: '+1800', pct: 9 },
+                { player: 'Vinicius Jr', nation: 'BRA', odds: '+2000', pct: 8 },
+                { player: 'Christian Pulisic', nation: 'USA', odds: '+10000', pct: 2 },
+              ].map((o, i) => (
+                <div key={i} className="pm-odds-row" style={{ fontSize: 13, cursor: 'pointer' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--bg-hover)'; (e.currentTarget as HTMLElement).style.borderRadius = '6px' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+                >
+                  <span style={{ width: 120, color: 'var(--text-primary)' }}>{o.player}</span>
+                  <span style={{ width: 30, fontSize: 10, color: 'var(--text-muted)' }}>{o.nation}</span>
+                  <div className="pm-odds-bar">
+                    <div className="pm-odds-bar-fill gold" style={{ width: `${o.pct * 3}%` }} />
+                  </div>
+                  <div className="pm-price" style={{ width: 60, justifyContent: 'center', fontSize: 13 }}>{o.odds}</div>
                 </div>
-                <span style={{ width: 55, color: '#ffb000', fontFamily: 'inherit', fontWeight: 'bold', textAlign: 'right' }}>{o.odds}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="terminal-card" style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 12, fontWeight: 'bold', color: c.text, marginBottom: 12, letterSpacing: 1 }}>
-            ╔══ UPCOMING MATCHES ══╗
+        <div className="pm-card" style={{ marginBottom: 24 }}>
+          <div className="pm-section-title">
+            <span className="pm-badge green">SCHEDULE</span> Upcoming Matches
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 8 }}>
-            {matches.slice(0, 12).map((m: any) => (
-              <div key={m.id} style={{ padding: '6px 8px', border: '1px solid #0f1a0f', fontSize: 11 }}>
-                <span style={{ color: '#004d1a' }}>{m.date} {m.time}</span>
-                <span style={{ marginLeft: 8, color: '#88cc88' }}>{m.stage}</span>
-                <span style={{ marginLeft: 8, color: c.dim }}>v{m.venue}</span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 8, marginTop: 8 }}>
+            {matches.slice(0, 10).map((m: any) => (
+              <div key={m.id} className="pm-card" style={{ padding: '10px 12px', cursor: 'pointer' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--blue)'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'}
+              >
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{m.date} · {m.time}</div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)', marginTop: 2 }}>{m.stage}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>Venue #{m.venue}</div>
               </div>
             ))}
           </div>
         </div>
 
         {usa250 && (
-          <div className="terminal-card" style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 'bold', color: '#ffb000', marginBottom: 8, letterSpacing: 1 }}>
-              ╔══ USA 250th · SEMIQUINCENTENNIAL ══╗
+          <div className="pm-card" style={{ marginBottom: 24 }}>
+            <div className="pm-section-title">
+              <span className="pm-badge gold">USA 250</span> Semiquincentennial — {usa250.date}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 8 }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginBottom: 12 }}>{usa250.description}</p>
+            <div className="pm-grid-4">
               {usa250.facts.slice(0, 6).map((f: any) => (
-                <div key={f.id} style={{ padding: '6px 8px', border: '1px solid #1a150a', fontSize: 11 }}>
-                  <span style={{ color: '#ffb000' }}>[{f.year}]</span>
-                  <span style={{ marginLeft: 6, color: '#aa8833' }}>{f.colony}</span>
-                  <div style={{ color: '#665522', marginTop: 3 }}>{f.fact}</div>
+                <div key={f.id} className="pm-card" style={{ padding: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gold)', marginBottom: 4 }}>{f.colony} · {f.year}</div>
+                  <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{f.fact}</div>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        <div style={{ textAlign: 'center', color: '#003300', fontSize: 10, marginTop: 32 }}>
-          <a href="/matches" className="nav-link" style={{ padding: '2px 8px' }}>[all matches]</a>
-          <span style={{ margin: '0 8px' }}>│</span>
-          <a href="/betting" className="nav-link" style={{ padding: '2px 8px' }}>[betting exchange]</a>
-          <span style={{ margin: '0 8px' }}>│</span>
-          <a href="/trump" className="nav-link" style={{ padding: '2px 8px', color: '#664400' }}>[MAGA mode]</a>
-          <br /><br />
-          <span style={{ color: '#001a00' }}>github.com/EASS-HIT-PART-A-2026-CLASS-IX/world-trump-2026</span>
+        <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--text-muted)', fontSize: 12 }}>
+          <a href="/matches" className="pm-btn" style={{ marginRight: 8 }}>All Matches →</a>
+          <a href="/betting" className="pm-btn" style={{ marginRight: 8 }}>All Markets →</a>
+          <a href="/trump" className="pm-btn">USA 250 Hub →</a>
         </div>
       </div>
     </div>

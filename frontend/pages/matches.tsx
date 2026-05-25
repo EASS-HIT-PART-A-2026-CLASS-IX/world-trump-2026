@@ -3,7 +3,7 @@ import { fetchAPI } from './_app'
 
 const STAGES = ['Group', 'Round of 32', 'Round of 16', 'Quarterfinal', 'Semifinal', 'Third Place', 'Final']
 
-export default function Matches({ hackerMode }: { hackerMode: boolean }) {
+export default function Matches({ trumpMode }: { trumpMode: boolean }) {
   const [matches, setMatches] = useState<any[]>([])
   const [teams, setTeams] = useState<any[]>([])
   const [stage, setStage] = useState('all')
@@ -11,57 +11,72 @@ export default function Matches({ hackerMode }: { hackerMode: boolean }) {
 
   useEffect(() => {
     Promise.all([fetchAPI('matches'), fetchAPI('teams')])
-      .then(([m, t]) => { setMatches(m.matches || []); setTeams(t.teams || []) })
+      .then(([m, t]) => { setMatches(m.matches||[]); setTeams(t.teams||[]) })
       .catch(e => setError(e.message))
   }, [])
 
   const getTeam = (id: number) => teams.find(t => t.id === id)
-  const filtered = stage === 'all' ? matches : matches.filter((m: any) => m.stage.includes(stage))
-  const c = hackerMode ? { text: '#ffb000', dim: '#664400', bg: '#0a0000' } : { text: '#00cc44', dim: '#006622', bg: '#0a0a0a' }
+  const filtered = stage === 'all' ? matches : matches.filter((m:any) => m.stage.includes(stage))
 
   return (
-    <div style={{ background: c.bg, minHeight: 'calc(100vh - 40px)', paddingBottom: 24 }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
-        <div style={{ color: c.dim, fontSize: 11, marginBottom: 4 }}>
-          <span style={{ color: c.text }}>$</span> ls /schedule/ --sort=date
+    <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', paddingBottom: 40 }}>
+      <div className="pm-container">
+        <div style={{ padding: '20px 0 12px' }}>
+          <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px', background: 'linear-gradient(135deg, #4B7BF5, #00D4AA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Match Schedule
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>
+            {filtered.length} of 104 matches · June 11 – July 19, 2026
+          </p>
         </div>
-        <h1 style={{ fontSize: 22, fontWeight: 'bold', color: c.text, textShadow: `0 0 10px ${c.text}`, margin: '0 0 4px 0', letterSpacing: 2 }}>
-          ╔══ MATCH SCHEDULE ══╗
-        </h1>
-        <div style={{ fontSize: 11, color: c.dim, marginBottom: 16 }}>June 11 → July 19, 2026 · {filtered.length} of 104 matches</div>
 
-        {error && <div style={{ border: '1px solid #ff3333', padding: '8px 12px', marginBottom: 16, color: '#ff3333', fontSize: 12 }}>[ERROR] {error}</div>}
+        {error && <div className="pm-card" style={{ marginBottom: 16, borderColor: 'var(--red)', color: 'var(--red)', fontSize: 13 }}>Error: {error}</div>}
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 20 }}>
-          <button className="terminal-btn active" onClick={() => setStage('all')} style={stage === 'all' ? { color: c.text, borderColor: c.text } : {}}>all</button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
+          <button className={`pm-btn ${stage === 'all' ? 'active' : ''}`} onClick={() => setStage('all')}>All</button>
           {STAGES.map(s => (
-            <button key={s} className="terminal-btn" onClick={() => setStage(s)} style={stage === s ? { color: c.text, borderColor: c.text } : {}}>{s}</button>
+            <button key={s} className={`pm-btn ${stage === s ? 'active' : ''}`} onClick={() => setStage(s)}>{s}</button>
           ))}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {filtered.map((m: any) => {
-            const home = getTeam(m.home); const away = getTeam(m.away)
-            return (
-              <div key={m.id} className="terminal-card" style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', fontSize: 12 }}>
-                <span style={{ width: 80, color: '#004d1a', fontSize: 11, flexShrink: 0 }}>{m.date}</span>
-                <span style={{ width: 40, color: '#003300', fontSize: 10, flexShrink: 0 }}>{m.time}</span>
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                  <span style={{ width: 120, textAlign: 'right', color: '#88cc88' }}>{home?.name || 'TBD'}</span>
-                  <span style={{ fontSize: 16 }}>{home?.flag || '⚽'}</span>
-                  <span style={{ color: '#003300', margin: '0 8px', fontSize: 10 }}>vs</span>
-                  <span style={{ fontSize: 16 }}>{away?.flag || '⚽'}</span>
-                  <span style={{ width: 120, color: '#88cc88' }}>{away?.name || 'TBD'}</span>
-                </div>
-                <span style={{ width: 100, textAlign: 'right', color: c.text, fontSize: 11, flexShrink: 0 }}>{m.stage}</span>
-                <span style={{ width: 50, textAlign: 'right', color: '#003300', fontSize: 10, flexShrink: 0 }}>v{m.venue}</span>
-              </div>
-            )
-          })}
-        </div>
-
-        <div style={{ textAlign: 'center', color: '#003300', fontSize: 10, marginTop: 24 }}>
-          j/k scroll · / search · :q back to home
+        <div className="pm-card" style={{ padding: 0, overflow: 'hidden' }}>
+          <table className="pm-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Home</th>
+                <th></th>
+                <th>Away</th>
+                <th>Stage</th>
+                <th style={{ textAlign: 'right' }}>Venue</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((m: any) => {
+                const home = getTeam(m.home); const away = getTeam(m.away)
+                return (
+                  <tr key={m.id}>
+                    <td style={{ color: 'var(--text-secondary)', fontSize: 12, minWidth: 90 }}>{m.date}</td>
+                    <td style={{ color: 'var(--text-muted)', fontSize: 12 }}>{m.time}</td>
+                    <td style={{ fontWeight: 500 }}>
+                      <span style={{ marginRight: 6 }}>{home?.flag||''}</span>
+                      {home?.name || 'TBD'}
+                    </td>
+                    <td style={{ color: 'var(--text-muted)', fontSize: 12 }}>vs</td>
+                    <td style={{ fontWeight: 500 }}>
+                      <span style={{ marginRight: 6 }}>{away?.flag||''}</span>
+                      {away?.name || 'TBD'}
+                    </td>
+                    <td style={{ fontSize: 12 }}>
+                      <span className="pm-badge blue">{m.stage}</span>
+                    </td>
+                    <td style={{ textAlign: 'right', color: 'var(--text-muted)', fontSize: 12 }}>#{m.venue}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
