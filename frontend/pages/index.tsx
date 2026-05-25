@@ -1,28 +1,25 @@
 import { useState, useEffect } from 'react'
-
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+import { fetchAPI } from './_app'
 
 export default function Home({ trumpMode }: { trumpMode: boolean }) {
   const [teams, setTeams] = useState<any[]>([])
-  const [venues, setVenues] = useState<any[]>([])
   const [matches, setMatches] = useState<any[]>([])
   const [usa250, setUsa250] = useState<any>(null)
   const [quotes, setQuotes] = useState<string[]>([])
+  const [error, setError] = useState('')
 
   useEffect(() => {
     Promise.all([
-      fetch(`${API}/teams`).then(r => r.json()),
-      fetch(`${API}/venues`).then(r => r.json()),
-      fetch(`${API}/matches?stage=group`).then(r => r.json()),
-      fetch(`${API}/usa250`).then(r => r.json()),
-      fetch(`${API}/trump-quotes`).then(r => r.json()),
-    ]).then(([t, v, m, u, q]) => {
+      fetchAPI('teams'),
+      fetchAPI('matches?stage=group'),
+      fetchAPI('usa250'),
+      fetchAPI('trump-quotes'),
+    ]).then(([t, m, u, q]) => {
       setTeams(t.teams || [])
-      setVenues(v.venues || [])
       setMatches(m.matches || [])
       setUsa250(u)
       setQuotes(q.quotes || [])
-    }).catch(console.error)
+    }).catch(e => setError(e.message))
   }, [])
 
   const bg = trumpMode ? 'bg-gradient-to-b from-[#1a0a0a] to-[#2d1515]' : 'bg-gradient-to-b from-[#0D1117] to-[#161B22]'
@@ -43,10 +40,13 @@ export default function Home({ trumpMode }: { trumpMode: boolean }) {
           )}
         </div>
 
+        {error && <div className="card mb-4 border-red-500/50 text-red-400 text-sm">Error: {error}</div>}
+
         <div className="overflow-hidden bg-[#111]/50 border border-yellow-600/30 rounded-lg mb-8">
           <div className="ticker py-2 text-sm text-yellow-500/70 font-mono">
-            {quotes.length > 0 ? quotes.join(' · ') : 'Loading...'} &nbsp;&nbsp;
-            {quotes.length > 0 ? quotes.join(' · ') : 'Loading...'}
+            {quotes.length > 0 ? quotes.join(' · ') : 'President Trump welcomes the world to the GREATEST World Cup in history. 250 years of American greatness. USA! USA! USA! · MAKE SOCCER GREAT AGAIN!'}
+            &nbsp;&nbsp;
+            {quotes.length > 0 ? quotes.join(' · ') : 'President Trump welcomes the world to the GREATEST World Cup in history. 250 years of American greatness. USA! USA! USA! · MAKE SOCCER GREAT AGAIN!'}
           </div>
         </div>
 
@@ -77,7 +77,6 @@ export default function Home({ trumpMode }: { trumpMode: boolean }) {
               ))}
             </div>
           </div>
-
           <div className="card">
             <h2 className="text-lg font-bold mb-4 text-vegas-gold">🎯 Golden Boot Odds</h2>
             <div className="space-y-2">
@@ -103,9 +102,7 @@ export default function Home({ trumpMode }: { trumpMode: boolean }) {
 
         {usa250 && (
           <div className="card mb-8">
-            <h2 className="text-lg font-bold mb-4">
-              🇺🇸 {usa250.title} — {usa250.date}
-            </h2>
+            <h2 className="text-lg font-bold mb-4">🇺🇸 {usa250.title} — {usa250.date}</h2>
             <p className="text-sm text-gray-400 mb-4">{usa250.description}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {usa250.facts.slice(0, 6).map((f: any) => (
@@ -121,12 +118,12 @@ export default function Home({ trumpMode }: { trumpMode: boolean }) {
         <div className="card mb-8">
           <h2 className="text-lg font-bold mb-4 text-vegas-gold">📅 First Matches</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {matches.slice(0, 6).map((m: any) => (
+            {matches.slice(0, 8).map((m: any) => (
               <div key={m.id} className="flex items-center gap-3 p-3 bg-[#0D1117] rounded border border-[#30363D]">
-                <div className="text-xs text-gray-500 w-20">{m.date}</div>
+                <div className="text-xs text-gray-500 w-24">{m.date} {m.time}</div>
                 <div className="flex-1">
-                  <div className="text-sm font-bold text-vegas-gold">{m.stage}</div>
-                  <div className="text-xs text-gray-400">Venue #{m.venue}</div>
+                  <div className="text-xs font-bold text-vegas-gold">{m.stage}</div>
+                  <div className="text-xs text-gray-400">{m.home_name || `Team #${m.home}`} vs {m.away_name || `Team #${m.away}`}</div>
                 </div>
               </div>
             ))}
