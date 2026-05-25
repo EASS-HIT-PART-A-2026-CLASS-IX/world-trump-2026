@@ -1,21 +1,15 @@
-name: world-trump-2026
+sandbox: world-trump-2026
 image: ubuntu:22.04
-
-services:
-  - name: redis
-    port: 6379
-    image: redis:7-alpine
-
-  - name: backend
-    port: 8000
-    build:
-      context: ./backend
-    env:
-      REDIS_URL: redis://localhost:6379
-
-  - name: frontend
-    port: 3000
-    build:
-      context: ./frontend
-    env:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
+cpu: 2
+memory_mb: 4096
+disk_gb: 20
+setup_script: |
+  sudo apt-get update -y
+  sudo apt-get install -y docker.io docker-compose-v2 curl git
+  sudo systemctl start docker
+  sudo usermod -aG docker $USER
+  git clone https://github.com/EASS-HIT-PART-A-2026-CLASS-IX/world-trump-2026.git /home/ubuntu/world-trump-2026
+  cd /home/ubuntu/world-trump-2026
+  docker compose up -d --build
+env:
+  NEXT_PUBLIC_API_URL: http://localhost:8000

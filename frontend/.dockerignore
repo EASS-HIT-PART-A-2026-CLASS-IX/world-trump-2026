@@ -2,9 +2,3 @@ node_modules
 .next
 .git
 .gitignore
-EOF && \
-cat > backend/.dockerignore << 'EOF'
-__pycache__
-*.pyc
-.git
-.gitignore
