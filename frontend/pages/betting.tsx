@@ -1,83 +1,92 @@
 import { useState, useEffect } from 'react'
 import { fetchAPI } from './_app'
 
-interface Market { id: number; category: string; badge?: string; entries: any[] }
-
-function HelpTooltip({ text }: { text: string }) {
-  return (
-    <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 2, cursor: 'help' }}>
-      <span tabIndex={0} role="button" aria-label="View explanation" style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600 }}>ⓘ</span>
-      <span style={{
-        position: 'absolute', bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)',
-        padding: '8px 12px', background: 'var(--bg-card)', border: '1px solid var(--border)',
-        borderRadius: 6, fontSize: 11, color: 'var(--text-secondary)', whiteSpace: 'nowrap',
-        opacity: 0, visibility: 'hidden', transition: 'opacity 0.15s, visibility 0.15s',
-        zIndex: 50, pointerEvents: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
-      }}
-        className="pm-tooltip-hover"
-      >
-        {text}
-      </span>
-      <style>{`.pm-tooltip-hover, span:hover > .pm-tooltip-hover, span:focus-within > .pm-tooltip-hover { opacity: 1; visibility: visible; }`}</style>
-    </span>
-  )
-}
-
 export default function Betting({ trumpMode }: { trumpMode: boolean }) {
-  const [markets, setMarkets] = useState<Market[]>([])
+  const [markets, setMarkets] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchAPI('odds').then(d => setMarkets(d.markets || [])).catch(e => setError(e.message))
+    fetchAPI('odds')
+      .then(d => { setMarkets(d.markets || []); setLoading(false) })
+      .catch(e => { setError(e.message); setLoading(false) })
   }, [])
 
+  if (loading) return <div style={{ background: 'var(--bg)', minHeight: '100vh' }}><div className="pm-container"><div className="pm-empty">Loading markets…</div></div></div>
+
+  if (error) return <div style={{ background: 'var(--bg)', minHeight: '100vh' }}><div className="pm-container"><div className="pm-card" style={{ borderColor: 'var(--red)', color: 'var(--red)' }}>Error: {error}</div></div></div>
+
   return (
-    <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', paddingBottom: 40 }}>
+    <div style={{ background: 'var(--bg)', minHeight: '100vh', paddingBottom: 40 }}>
       <div className="pm-container">
+
         <header style={{ padding: '20px 0 12px' }}>
-          <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px', background: 'linear-gradient(135deg, #4B7BF5, #00D4AA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textWrap: 'balance' }}>
+          <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px' }}>
             Betting Exchange
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>
-            Polymarket-style odds · UK fractional · US moneyline · hover <HelpTooltip text="UK = fractional (5/1 means win&nbsp;₪5 for every&nbsp;₪1). US = moneyline (+450 = bet&nbsp;$100&nbsp;→ win&nbsp;$450, −200 = bet&nbsp;$200&nbsp;→ win&nbsp;$100)." /> for help
+          <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 4 }}>
+            Hover <span className="pm-has-tip"><span className="pm-tip-trigger">ⓘ</span>
+              <span className="pm-tip-content">
+                <b>UK (9/2):</b> Win ₪9 for every ₪2 bet<br />
+                <b>US (+450):</b> Underdog — bet $100 → win $450<br />
+                <b>US (−200):</b> Favorite — bet $200 → win $100<br />
+                <b>Prob:</b> How likely the market thinks it is
+              </span>
+            </span> for odds guide · Shekel examples below
           </p>
         </header>
 
-        {error && (
-          <div className="pm-card" style={{ marginBottom: 16, borderColor: 'var(--red)', color: 'var(--red)', fontSize: 13 }} role="alert">
-            Error: {error}
+        <div className="pm-card" style={{ marginBottom: 20, borderColor: 'rgba(245,166,35,0.2)' }}>
+          <div style={{ fontSize: 12, color: 'var(--gold)', fontWeight: 600, marginBottom: 8 }}>₪ Quick Guide for Israelis</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10, fontSize: 12, color: 'var(--muted)' }}>
+            <div>
+              <b style={{ color: 'var(--text)' }}>5/1 =</b> put ₪100 → win ₪500 + get your ₪100 back = ₪600 total
+            </div>
+            <div>
+              <b style={{ color: 'var(--text)' }}>+1000 =</b> put $10 → win $100 profit. Higher number = bigger win, smaller chance
+            </div>
+            <div>
+              <b style={{ color: 'var(--text)' }}>−200 =</b> put ₪200 → win ₪100. Favorite team, smaller profit
+            </div>
+            <div>
+              <b style={{ color: 'var(--text)' }}>18% =</b> about 1 in 5.5 chance. Don't bet the house on this
+            </div>
           </div>
-        )}
-
-        {markets.length === 0 && !error && (
-          <div className="pm-empty" aria-live="polite">Loading markets…</div>
-        )}
+        </div>
 
         {markets.map(market => (
           <section key={market.id} className="pm-card" style={{ marginBottom: 16 }} aria-label={market.category}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-              <h2 className="pm-section-title" style={{ marginBottom: 0 }}>
+              <h2 className="pm-section-title" style={{ margin: 0 }}>
                 {market.badge && <span className="pm-badge blue" style={{ marginRight: 8 }}>{market.badge}</span>}
                 {market.category}
               </h2>
-              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{market.entries.length}&nbsp;entries</span>
+              <span style={{ fontSize: 11, color: 'var(--dim)' }}>{market.entries.length} entries</span>
             </div>
 
             <div style={{ overflowX: 'auto' }}>
-              <table className="pm-table" role="table">
-                <caption className="sr-only">{market.category} betting odds</caption>
+              <table className="pm-table">
                 <thead>
                   <tr>
-                    <th scope="col">{market.id >= 2 && market.id <= 3 ? 'Player' : 'Entry'}</th>
-                    <th scope="col">Nation</th>
-                    <th scope="col" style={{ textAlign: 'right' }}>
-                      UK <HelpTooltip text="Fractional odds. 9/2 = win&nbsp;₪9 for every&nbsp;₪2 bet. Return = stake&nbsp;+&nbsp;winnings." />
+                    <th>{market.id >= 2 && market.id <= 3 ? 'Player' : 'Entry / Team'}</th>
+                    <th>Nat</th>
+                    <th style={{ textAlign: 'right' }}>
+                      UK&nbsp;
+                      <span className="pm-has-tip"><span className="pm-tip-trigger">ⓘ</span>
+                        <span className="pm-tip-content">9/2 = put ₪2 → get ₪11 back (₪9 win + ₪2 stake)</span>
+                      </span>
                     </th>
-                    <th scope="col" style={{ textAlign: 'right' }}>
-                      US Moneyline <HelpTooltip text="+450 = underdog (bet&nbsp;$100&nbsp;→ win&nbsp;$450). −200 = favorite (bet&nbsp;$200&nbsp;→ win&nbsp;$100). + = bigger payout, − = safer." />
+                    <th style={{ textAlign: 'right' }}>
+                      US Moneyline&nbsp;
+                      <span className="pm-has-tip"><span className="pm-tip-trigger">ⓘ</span>
+                        <span className="pm-tip-content">+ big number = underdog (big win, risky). − = favorite (safe, small win)</span>
+                      </span>
                     </th>
-                    <th scope="col" style={{ textAlign: 'right' }}>
-                      Implied&nbsp;% <HelpTooltip text="Market-implied probability. 18% means ~1 in 5.5 chance." />
+                    <th style={{ textAlign: 'right' }}>
+                      Prob&nbsp;
+                      <span className="pm-has-tip"><span className="pm-tip-trigger">ⓘ</span>
+                        <span className="pm-tip-content">% chance implied by the market. 50% = coin flip. 1% = long shot.</span>
+                      </span>
                     </th>
                   </tr>
                 </thead>
@@ -91,25 +100,27 @@ export default function Betting({ trumpMode }: { trumpMode: boolean }) {
                     const isNum = typeof prob === 'number'
 
                     return (
-                      <tr key={i} tabIndex={0} onKeyDown={e => { if (e.key === 'Enter') { /* select row */ } }}>
+                      <tr key={i} tabIndex={0}>
                         <td style={{ fontWeight: isFav ? 600 : 400 }}>
-                          {isFav && <span style={{ color: 'var(--green)', marginRight: 4 }} aria-label="Favorite">★</span>}
+                          {isFav && <span style={{ color: 'var(--green)', marginRight: 4 }}>★</span>}
                           {name}
                         </td>
-                        <td style={{ color: 'var(--text-muted)', fontSize: 12 }}>{nation}</td>
-                        <td style={{ textAlign: 'right', fontFamily: 'SF Mono, ui-monospace, monospace', color: 'var(--gold)', fontVariantNumeric: 'tabular-nums' }}>{entry.fractional}</td>
-                        <td style={{ textAlign: 'right', fontFamily: 'SF Mono, ui-monospace, monospace', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
-                          <span className={isFav ? 'pm-price green' : 'pm-price red'} style={{ display: 'inline-flex', fontSize: 12 }}>
+                        <td style={{ color: 'var(--dim)', fontSize: 12 }}>{nation}</td>
+                        <td style={{ textAlign: 'right', fontFamily: 'ui-monospace,monospace', color: 'var(--gold)' }}>
+                          {entry.fractional}
+                        </td>
+                        <td style={{ textAlign: 'right' }}>
+                          <span className={`pm-price ${isFav ? 'green' : 'red'}`}>
                             {ml}
                           </span>
                         </td>
-                        <td style={{ textAlign: 'right', color: 'var(--text-secondary)', fontSize: 12 }}>
+                        <td style={{ textAlign: 'right', color: 'var(--muted)', fontSize: 12 }}>
                           {entry.type && !isNum ? entry.type : isNum ? (
                             <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'flex-end' }}>
-                              <div className="pm-odds-bar" style={{ width: 60 }}>
+                              <div className="pm-odds-bar" style={{ width: 50 }}>
                                 <div className="pm-odds-bar-fill blue" style={{ width: `${prob}%` }} />
                               </div>
-                              <span style={{ fontVariantNumeric: 'tabular-nums' }}>{prob}%</span>
+                              <span>{prob}%</span>
                             </div>
                           ) : '—'}
                         </td>
@@ -121,6 +132,7 @@ export default function Betting({ trumpMode }: { trumpMode: boolean }) {
             </div>
           </section>
         ))}
+
       </div>
     </div>
   )
