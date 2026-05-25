@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { fetchAPI } from './_app'
 
-export default function Matches({ trumpMode }: { trumpMode: boolean }) {
+const STAGES = ['Group', 'Round of 32', 'Round of 16', 'Quarterfinal', 'Semifinal', 'Third Place', 'Final']
+
+export default function Matches({ hackerMode }: { hackerMode: boolean }) {
   const [matches, setMatches] = useState<any[]>([])
   const [teams, setTeams] = useState<any[]>([])
   const [stage, setStage] = useState('all')
@@ -14,47 +16,54 @@ export default function Matches({ trumpMode }: { trumpMode: boolean }) {
   }, [])
 
   const getTeam = (id: number) => teams.find(t => t.id === id)
-  const stages = ['Group', 'Round of 32', 'Round of 16', 'Quarterfinal', 'Semifinal', 'Third Place', 'Final']
   const filtered = stage === 'all' ? matches : matches.filter((m: any) => m.stage.includes(stage))
-  const bg = trumpMode ? 'bg-gradient-to-b from-[#1a0a0a] to-[#2d1515]' : 'bg-gradient-to-b from-[#0D1117] to-[#161B22]'
+  const c = hackerMode ? { text: '#ffb000', dim: '#664400', bg: '#0a0000' } : { text: '#00cc44', dim: '#006622', bg: '#0a0a0a' }
 
   return (
-    <div className={`min-h-screen ${bg}`}>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-1" style={{ color: trumpMode ? '#FFD700' : '#C5A333' }}>📅 Match Schedule</h1>
-        <p className="text-sm text-gray-400 mb-6">June 11 — July 19, 2026 · {filtered.length} Matches</p>
-        {error && <div className="card mb-4 border-red-500/50 text-red-400 text-sm">Error: {error}</div>}
+    <div style={{ background: c.bg, minHeight: 'calc(100vh - 40px)', paddingBottom: 24 }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
+        <div style={{ color: c.dim, fontSize: 11, marginBottom: 4 }}>
+          <span style={{ color: c.text }}>$</span> ls /schedule/ --sort=date
+        </div>
+        <h1 style={{ fontSize: 22, fontWeight: 'bold', color: c.text, textShadow: `0 0 10px ${c.text}`, margin: '0 0 4px 0', letterSpacing: 2 }}>
+          ╔══ MATCH SCHEDULE ══╗
+        </h1>
+        <div style={{ fontSize: 11, color: c.dim, marginBottom: 16 }}>June 11 → July 19, 2026 · {filtered.length} of 104 matches</div>
 
-        <div className="flex flex-wrap gap-2 mb-6">
-          <button onClick={() => setStage('all')} className="stage-btn active" style={stage==='all'?{borderColor:'#C5A333',color:'#C5A333'}:{}}>All</button>
-          {stages.map(s => (
-            <button key={s} onClick={() => setStage(s)} className="stage-btn" style={stage===s?{borderColor:'#C5A333',color:'#C5A333'}:{}}>{s}</button>
+        {error && <div style={{ border: '1px solid #ff3333', padding: '8px 12px', marginBottom: 16, color: '#ff3333', fontSize: 12 }}>[ERROR] {error}</div>}
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 20 }}>
+          <button className="terminal-btn active" onClick={() => setStage('all')} style={stage === 'all' ? { color: c.text, borderColor: c.text } : {}}>all</button>
+          {STAGES.map(s => (
+            <button key={s} className="terminal-btn" onClick={() => setStage(s)} style={stage === s ? { color: c.text, borderColor: c.text } : {}}>{s}</button>
           ))}
         </div>
 
-        <div className="space-y-2">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {filtered.map((m: any) => {
             const home = getTeam(m.home); const away = getTeam(m.away)
             return (
-              <div key={m.id} className="card flex items-center gap-3 hover:border-vegas-gold/30 transition-colors">
-                <div className="w-24 text-xs text-gray-500"><div>{m.date}</div><div>{m.time}</div></div>
-                <div className="flex-1 flex items-center gap-3">
-                  <span className="text-sm w-28 text-right">{home?.name || 'TBD'}</span>
-                  <span className="text-lg">{home?.flag || '⚽'}</span>
-                  <span className="text-xs text-gray-500 font-mono">vs</span>
-                  <span className="text-lg">{away?.flag || '⚽'}</span>
-                  <span className="text-sm w-28">{away?.name || 'TBD'}</span>
+              <div key={m.id} className="terminal-card" style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', fontSize: 12 }}>
+                <span style={{ width: 80, color: '#004d1a', fontSize: 11, flexShrink: 0 }}>{m.date}</span>
+                <span style={{ width: 40, color: '#003300', fontSize: 10, flexShrink: 0 }}>{m.time}</span>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                  <span style={{ width: 120, textAlign: 'right', color: '#88cc88' }}>{home?.name || 'TBD'}</span>
+                  <span style={{ fontSize: 16 }}>{home?.flag || '⚽'}</span>
+                  <span style={{ color: '#003300', margin: '0 8px', fontSize: 10 }}>vs</span>
+                  <span style={{ fontSize: 16 }}>{away?.flag || '⚽'}</span>
+                  <span style={{ width: 120, color: '#88cc88' }}>{away?.name || 'TBD'}</span>
                 </div>
-                <div className="text-right"><div className="text-xs font-bold text-vegas-gold">{m.stage}</div><div className="text-xs text-gray-500">{m.group || ''}</div></div>
+                <span style={{ width: 100, textAlign: 'right', color: c.text, fontSize: 11, flexShrink: 0 }}>{m.stage}</span>
+                <span style={{ width: 50, textAlign: 'right', color: '#003300', fontSize: 10, flexShrink: 0 }}>v{m.venue}</span>
               </div>
             )
           })}
         </div>
+
+        <div style={{ textAlign: 'center', color: '#003300', fontSize: 10, marginTop: 24 }}>
+          j/k scroll · / search · :q back to home
+        </div>
       </div>
-      <style jsx>{`
-        .stage-btn { padding: 4px 12px; font-size: 12px; border: 1px solid #30363D; border-radius: 6px; background: #161B22; color: #E6EDF3; cursor: pointer; transition: all 0.2s; }
-        .stage-btn:hover { border-color: #C5A333; color: #C5A333; }
-      `}</style>
     </div>
   )
 }

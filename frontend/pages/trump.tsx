@@ -1,7 +1,20 @@
 import { useState, useEffect } from 'react'
 import { fetchAPI } from './_app'
 
-export default function Trump({ trumpMode }: { trumpMode: boolean }) {
+const ASCII_EAGLE = `
+      ,-.
+     / \\\`.         ╔══════════════════════════════════════╗
+    /    \\         ║   MAKE SOCCER GREAT AGAIN!  ║
+   /  _   \\        ╚══════════════════════════════════════╝
+  /,-' \`-. \\
+ /__|_____|__\\
+    ]     [
+   /_]___[_\\
+   |__|__|__|
+  ,'  |  |  \`.
+`
+
+export default function Trump({ hackerMode }: { hackerMode: boolean }) {
   const [usa250, setUsa250] = useState<any>(null)
   const [quotes, setQuotes] = useState<string[]>([])
   const [prediction, setPrediction] = useState('')
@@ -15,63 +28,123 @@ export default function Trump({ trumpMode }: { trumpMode: boolean }) {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a0a0a] to-[#2d1515]">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="text-7xl mb-4">🇺🇸</div>
-          <h1 className="text-5xl font-black mb-2" style={{ color: '#FFD700', textShadow: '2px 2px 0 #BF0A30' }}>MAKE SOCCER GREAT AGAIN!</h1>
-          <p className="text-lg text-yellow-200/60">President Trump's Official World Cup 2026 Hub</p>
-          <p className="text-sm text-gray-400 mt-2">America 250 · #MSGA · World Cup 2026 · USA</p>
-        </div>
-        {error && <div className="card mb-4 border-red-500/50 text-red-400 text-sm">Error: {error}</div>}
+    <div style={{ background: '#0a0000', minHeight: 'calc(100vh - 40px)', paddingBottom: 24, fontFamily: 'inherit' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="card text-center" style={{ borderColor: '#BF0A30' }}><div className="text-5xl mb-3">250</div><div className="text-sm text-gray-400">Years of American Greatness</div><div className="text-xs text-yellow-500 mt-2">July 4, 2026</div></div>
-          <div className="card text-center" style={{ borderColor: '#041E42' }}><div className="text-5xl mb-3">🏆</div><div className="text-sm text-gray-400">USA World Cup Host</div><div className="text-xs text-yellow-500 mt-2">3rd time hosting</div></div>
-          <div className="card text-center" style={{ borderColor: '#FFD700' }}><div className="text-5xl mb-3">⚽</div><div className="text-sm text-gray-400">USMNT World Cup</div><div className="text-xs text-yellow-500 mt-2">Group D · Making History</div></div>
+        <div style={{ color: '#664400', fontSize: 11, marginBottom: 4 }}>
+          <span style={{ color: '#ffb000' }}>$</span> ./broadcast --MAGA --USA250 --encrypted
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="card" style={{ borderColor: '#BF0A30' }}>
-            <h2 className="text-xl font-bold mb-1" style={{ color: '#FFD700' }}>TRUMP QUOTES</h2>
-            <div className="space-y-3 mt-4">
-              {quotes.map((q, i) => (
-                <div key={i} className="p-3 bg-[#0D1117] rounded border border-[#30363D]"><div className="text-xs text-yellow-300 italic">&ldquo;{q}&rdquo;</div></div>
-              ))}
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <pre style={{ color: '#664400', fontSize: 8, lineHeight: '9px', display: 'inline-block', textAlign: 'left' }}>{ASCII_EAGLE}</pre>
+        </div>
+
+        <h1 style={{ textAlign: 'center', fontSize: 28, fontWeight: 900, color: '#ffb000', textShadow: '0 0 20px #ffb000, 2px 2px 0 #661111', margin: '0 0 8px', letterSpacing: 3 }}>
+          MAKE SOCCER GREAT AGAIN!
+        </h1>
+        <p style={{ textAlign: 'center', color: '#aa8833', fontSize: 12, marginBottom: 24 }}>
+          PRESIDENT TRUMP'S OFFICIAL WORLD CUP 2026 HUB · JULY 4, 2026 · USA 250
+        </p>
+
+        {error && <div style={{ border: '1px solid #ff3333', padding: '8px 12px', marginBottom: 16, color: '#ff3333', fontSize: 12 }}>[ERROR] {error}</div>}
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 24 }}>
+          {[
+            { label: 'USA AGE', value: '250', icon: '🎂' },
+            { label: 'HOST', value: '3rd', icon: '🏟️' },
+            { label: 'USMNT GROUP', value: 'D', icon: '⚽' },
+            { label: 'TRUMP PRIZE', value: '🏅', icon: '🏆' },
+          ].map(s => (
+            <div key={s.label} className="terminal-card" style={{ textAlign: 'center', borderColor: '#2a1515' }}>
+              <div style={{ fontSize: 24, marginBottom: 4 }}>{s.icon}</div>
+              <div style={{ fontSize: 26, fontWeight: 'bold', color: '#ffb000', textShadow: '0 0 10px #ffb000' }}>{s.value}</div>
+              <div style={{ fontSize: 10, color: '#664400', letterSpacing: 2 }}>{s.label}</div>
             </div>
+          ))}
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: 16, marginBottom: 24 }}>
+          <div className="terminal-card" style={{ borderColor: '#2a1515' }}>
+            <div style={{ fontSize: 12, fontWeight: 'bold', color: '#ffb000', marginBottom: 10, letterSpacing: 2 }}>
+              ╔══ OFFICIAL STATEMENTS ══╗
+            </div>
+            {quotes.map((q, i) => (
+              <div key={i} style={{ padding: '6px 8px', borderLeft: '2px solid #2a1515', marginBottom: 6, fontSize: 11 }}>
+                <span style={{ color: '#664400' }}>&gt; </span>
+                <span style={{ color: '#aa8833' }}>{q}</span>
+              </div>
+            ))}
           </div>
-          <div className="card" style={{ borderColor: '#FFD700' }}>
-            <h2 className="text-xl font-bold mb-1" style={{ color: '#FFD700' }}>YOUR PREDICTION</h2>
+
+          <div className="terminal-card" style={{ borderColor: '#332200' }}>
+            <div style={{ fontSize: 12, fontWeight: 'bold', color: '#ffb000', marginBottom: 10, letterSpacing: 2 }}>
+              ╔══ YOUR PREDICTION ══╗
+            </div>
             {!submitted ? (
-              <div className="space-y-4 mt-4">
-                <textarea className="w-full p-3 rounded bg-[#0D1117] border border-[#30363D] text-sm text-gray-200 resize-none" rows={3}
-                  placeholder="USA beats Brazil 3-1 in the FINAL at MetLife Stadium. Pulisic hat trick. Trump presents the trophy. HISTORY!"
-                  value={prediction} onChange={e => setPrediction(e.target.value)} />
-                <button onClick={() => { if (prediction.trim()) setSubmitted(true) }} className="w-full py-3 rounded font-bold text-black" style={{ background: '#FFD700' }}>
-                  SUBMIT PREDICTION — MSGA!
+              <div>
+                <textarea
+                  style={{
+                    width: '100%', padding: '8px 10px', background: '#0a0808', border: '1px solid #2a1515',
+                    color: '#aa8833', fontFamily: 'inherit', fontSize: 12, resize: 'vertical', minHeight: 80,
+                    boxSizing: 'border-box',
+                  }}
+                  placeholder="> USA 3-1 BRAZIL. Pulisic hat trick at MetLife. Trump presents the trophy. BEST FINAL EVER."
+                  value={prediction}
+                  onChange={e => setPrediction(e.target.value)}
+                />
+                <button
+                  onClick={() => { if (prediction.trim()) setSubmitted(true) }}
+                  style={{
+                    width: '100%', marginTop: 8, padding: '8px',
+                    background: '#332200', border: '1px solid #664400', color: '#ffb000',
+                    fontFamily: 'inherit', fontSize: 13, fontWeight: 'bold', cursor: 'pointer',
+                    letterSpacing: 2,
+                  }}
+                >
+                  [ SUBMIT · TRANSMIT · MSGA ]
                 </button>
               </div>
             ) : (
-              <div className="text-center py-8"><div className="text-5xl mb-4">🇺🇸</div><div className="text-lg font-bold" style={{ color: '#FFD700' }}>PREDICTION LOCKED!</div><p className="text-sm text-gray-400 mt-2">The President has reviewed your prediction.</p></div>
+              <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                <div style={{ fontSize: 40 }}>🇺🇸</div>
+                <div style={{ fontSize: 14, fontWeight: 'bold', color: '#ffb000', marginTop: 8 }}>
+                  PREDICTION TRANSMITTED
+                </div>
+                <div style={{ fontSize: 11, color: '#664400', marginTop: 4 }}>
+                  SECURE CHANNEL · ENCRYPTED · TREMENDOUS
+                </div>
+              </div>
             )}
           </div>
         </div>
 
         {usa250 && (
-          <div className="card mb-8">
-            <h2 className="text-2xl font-bold mb-2" style={{ color: '#FFD700' }}>🇺🇸 13 COLONIES · 250 YEARS — {usa250.date}</h2>
-            <p className="text-sm text-gray-400 mb-4">{usa250.description}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          <div className="terminal-card" style={{ marginBottom: 24, borderColor: '#2a1515' }}>
+            <div style={{ fontSize: 12, fontWeight: 'bold', color: '#ffb000', marginBottom: 10, letterSpacing: 2 }}>
+              ╔══ 13 COLONIES · 250 YEARS ══╗
+            </div>
+            <div style={{ fontSize: 11, color: '#664400', marginBottom: 12 }}>{usa250.description}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 8 }}>
               {usa250.facts.map((f: any) => (
-                <div key={f.id} className="p-3 bg-[#0D1117] rounded border border-[#30363D]">
-                  <div className="flex items-center gap-2 mb-1"><span className="text-lg">⭐</span><span className="text-xs font-bold" style={{ color: '#FFD700' }}>{f.colony}</span><span className="text-xs text-gray-500">({f.year})</span></div>
-                  <div className="text-xs text-gray-400">{f.fact}</div>
+                <div key={f.id} style={{ padding: '6px 8px', border: '1px solid #1a1010', fontSize: 11 }}>
+                  <span style={{ color: '#ffb000' }}>[{f.year}]</span>
+                  <span style={{ marginLeft: 6, color: '#aa8833' }}>{f.colony}</span>
+                  <div style={{ color: '#553311', marginTop: 3 }}>{f.fact}</div>
                 </div>
               ))}
             </div>
           </div>
         )}
-        <div className="card text-center py-8"><div className="text-6xl mb-4">🎆</div><p className="text-2xl font-black" style={{ color: '#FFD700' }}>JULY 4, 2026 · PHILADELPHIA &amp; HOUSTON</p></div>
+
+        <div style={{ textAlign: 'center', color: '#331a00', fontSize: 10, marginTop: 32 }}>
+          <a href="/" className="nav-link" style={{ padding: '2px 8px' }}>[home]</a>
+          <span style={{ margin: '0 8px' }}>│</span>
+          <a href="/matches" className="nav-link" style={{ padding: '2px 8px' }}>[matches]</a>
+          <span style={{ margin: '0 8px' }}>│</span>
+          <a href="/betting" className="nav-link" style={{ padding: '2px 8px' }}>[betting exchange]</a>
+          <br /><br />
+          <span>🇺🇸 250 YEARS · 🇺🇸 WORLD CUP 2026 · 🇺🇸 MSGA</span>
+        </div>
       </div>
     </div>
   )

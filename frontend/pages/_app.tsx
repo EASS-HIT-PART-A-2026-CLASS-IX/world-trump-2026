@@ -3,38 +3,54 @@ import type { AppProps } from 'next/app'
 import { useState } from 'react'
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [trumpMode, setTrumpMode] = useState(false)
+  const [hackerMode, setHackerMode] = useState(false)
 
   return (
-    <div className={trumpMode ? 'trump-mode' : ''}>
-      <nav className="fixed top-0 w-full z-50 bg-vegas-dark/95 backdrop-blur border-b border-vegas-green/30">
-        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2">
-            <span className="text-2xl">⚽</span>
-            <span className="font-bold text-vegas-gold font-mono">WORLD TRUMP 2026</span>
+    <div className={hackerMode ? 'hacker-mode' : ''}>
+      <nav style={{ background: '#080c08', borderBottom: '1px solid #1a3a1a', position: 'fixed', top: 0, width: '100%', zIndex: 50, fontFamily: 'inherit' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+            <span style={{ color: '#00cc44', fontWeight: 'bold', fontSize: 14, textShadow: '0 0 8px #00cc44' }}>
+              ~/world-trump-2026
+            </span>
+            <span className="cursor-blink" style={{ width: 8, height: 14 }} />
           </a>
-          <div className="flex items-center gap-1">
-            <a href="/" className="nav-link">Home</a>
-            <a href="/matches" className="nav-link">Matches</a>
-            <a href="/betting" className="nav-link">Betting</a>
-            <a href="/venues" className="nav-link">Venues</a>
-            <a href="/trump" className="nav-link">🇺🇸 MAGA</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+            <a href="/" className="nav-link">[home]</a>
+            <a href="/matches" className="nav-link">[matches]</a>
+            <a href="/betting" className="nav-link">[betting]</a>
+            <a href="/venues" className="nav-link">[venues]</a>
+            <a href="/trump" className="nav-link" style={{ color: '#664400' }}>[MAGA]</a>
             <button
-              onClick={() => setTrumpMode(!trumpMode)}
-              className={`ml-3 px-3 py-1.5 rounded text-xs font-bold transition-all ${
-                trumpMode
-                  ? 'bg-trump-gold text-black shadow-lg shadow-trump-gold/50'
-                  : 'bg-vegas-green/20 text-vegas-green border border-vegas-green/30'
-              }`}
+              onClick={() => setHackerMode(!hackerMode)}
+              style={{
+                marginLeft: 12,
+                padding: '2px 10px',
+                background: hackerMode ? '#664400' : '#0a0f0a',
+                border: hackerMode ? '1px solid #ffb000' : '1px solid #1a3a1a',
+                color: hackerMode ? '#ffb000' : '#006622',
+                fontFamily: 'inherit',
+                fontSize: 11,
+                cursor: 'pointer',
+              }}
             >
-              {trumpMode ? 'TRUMP MODE ON' : 'TRUMP MODE'}
+              {hackerMode ? '>> MAGA MODE <<' : '> hacker_mode'}
             </button>
           </div>
         </div>
       </nav>
-      <main className="pt-14">
-        <Component {...pageProps} trumpMode={trumpMode} />
+      <main style={{ paddingTop: 40 }}>
+        <Component {...pageProps} hackerMode={hackerMode} />
       </main>
+
+      <div className="vim-mode">
+        <span className="mode-name">NORMAL</span>
+        <span style={{ color: '#004d1a' }}>world-trump-2026/</span>
+        <span style={{ color: '#1a3a1a' }}>|</span>
+        <span style={{ color: '#003300' }}>j/k scroll · q quit · :help betting</span>
+        <span style={{ color: '#1a3a1a', marginLeft: 'auto' }}>1:1</span>
+        <span className="vim-cursor" />
+      </div>
     </div>
   )
 }

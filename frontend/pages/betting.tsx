@@ -3,7 +3,7 @@ import { fetchAPI } from './_app'
 
 interface Market { id: number; category: string; badge?: string; entries: any[] }
 
-export default function Betting({ trumpMode }: { trumpMode: boolean }) {
+export default function Betting({ hackerMode }: { hackerMode: boolean }) {
   const [markets, setMarkets] = useState<Market[]>([])
   const [error, setError] = useState('')
 
@@ -11,83 +11,99 @@ export default function Betting({ trumpMode }: { trumpMode: boolean }) {
     fetchAPI('odds').then(d => setMarkets(d.markets || [])).catch(e => setError(e.message))
   }, [])
 
-  const bg = trumpMode ? 'bg-gradient-to-b from-[#1a0a0a] to-[#2d1515]' : 'bg-gradient-to-b from-[#0D1117] to-[#161B22]'
-  const gold = trumpMode ? '#FFD700' : '#C5A333'
+  const c = hackerMode ? { text: '#ffb000', dim: '#664400', bg: '#0a0000', border: '#2a1515', cardBg: '#0c0808' } : { text: '#00cc44', dim: '#006622', bg: '#0a0a0a', border: '#1a3a1a', cardBg: '#0c0f0c' }
 
   return (
-    <div className={`min-h-screen ${bg}`}>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
+    <div style={{ background: c.bg, minHeight: 'calc(100vh - 40px)', paddingBottom: 24, fontFamily: 'inherit' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
+
+        <div style={{ color: c.dim, fontSize: 11, marginBottom: 4 }}>
+          <span style={{ color: c.text }}>$</span> cat /markets/world-cup-2026.json
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
           <div>
-            <h1 className="text-3xl font-bold" style={{ color: gold }}>{trumpMode ? '🇺🇸 TRUMP BETTING PLAZA' : '🎰 WORLD CUP BETTING MARKETS'}</h1>
-            <p className="text-sm text-gray-400">{trumpMode ? 'LAS VEGAS — THE BEST ODDS, THE BIGGEST WINS, FOLKS!' : 'Polymarket-style odds — hover over any ℹ️ for explanations'}</p>
-          </div>
-        </div>
-
-        <div className="card mb-6 border-vegas-gold/30">
-          <h3 className="text-sm font-bold mb-3" style={{ color: gold }}>📖 HOW TO READ THE ODDS</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-400">
-            <div className="p-3 bg-[#0D1117] rounded">
-              <span className="font-bold text-vegas-gold">UK Fractional:</span>
-              <ul className="mt-1 space-y-1 ml-3 list-disc">
-                <li><code className="text-yellow-300">9/2</code> means: bet $2 → win $9 (+ your $2 back = $11 total)</li>
-                <li>Think: &ldquo;win 9 for every 2 you put in&rdquo;</li>
-                <li>Smaller right number = bigger favorite. <code className="text-green-400">1/10</code> = heavy favorite</li>
-              </ul>
-            </div>
-            <div className="p-3 bg-[#0D1117] rounded">
-              <span className="font-bold text-vegas-gold">US Moneyline:</span>
-              <ul className="mt-1 space-y-1 ml-3 list-disc">
-                <li><code className="text-green-400">+450</code> = underdog. Bet $100 → win $450 profit</li>
-                <li><code className="text-red-400">-200</code> = favorite. Bet $200 → win $100 profit</li>
-                <li><code className="text-green-400">+</code> = underdog (big payout). <code className="text-red-400">-</code> = favorite (safer)</li>
-              </ul>
+            <h1 style={{ fontSize: 22, fontWeight: 'bold', color: c.text, textShadow: `0 0 10px ${c.text}`, margin: 0, letterSpacing: 2 }}>
+              ╔══ BETTING EXCHANGE ══╗
+            </h1>
+            <div style={{ fontSize: 11, color: c.dim, marginTop: 4 }}>
+              Live odds · UK fractional · US moneyline · hover any <span style={{ color: c.text }}>?</span> for help
             </div>
           </div>
         </div>
 
-        {error && <div className="card mb-4 border-red-500/50 text-red-400 text-sm">Error: {error}</div>}
+        {error && (
+          <div style={{ border: '1px solid #ff3333', padding: '8px 12px', marginBottom: 16, color: '#ff3333', fontSize: 12 }}>
+            [ERROR] {error}
+          </div>
+        )}
+
+        <div className="terminal-card" style={{ marginBottom: 20, borderColor: '#332200' }}>
+          <div style={{ fontSize: 12, fontWeight: 'bold', color: '#ffb000', marginBottom: 10, letterSpacing: 1 }}>
+            ╔══ HELP: HOW TO READ THE ODDS ══╗
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 12, fontSize: 11 }}>
+            <div style={{ padding: '8px 10px', border: '1px solid #1a200a' }}>
+              <span style={{ color: '#ffb000', fontWeight: 'bold' }}>UK Fractional (5/1):</span>
+              <div style={{ color: '#668844', marginTop: 4 }}>
+                Bet $1 → win $5 + get your $1 back = $6 total<br />
+                Smaller right = favorite. <span style={{ color: '#00cc44' }}>1/10</span> = heavy favorite
+              </div>
+            </div>
+            <div style={{ padding: '8px 10px', border: '1px solid #1a200a' }}>
+              <span style={{ color: '#ffb000', fontWeight: 'bold' }}>US Moneyline (+450 / -200):</span>
+              <div style={{ color: '#668844', marginTop: 4 }}>
+                <span style={{ color: '#00cc44' }}>+</span> = underdog. $100 → win $X<br />
+                <span style={{ color: '#ff3333' }}>-</span> = favorite. Bet $X → win $100
+              </div>
+            </div>
+          </div>
+        </div>
 
         {markets.map(market => (
-          <div key={market.id} className="card mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <h2 className="text-lg font-bold" style={{ color: gold }}>{market.badge && <span className="mr-2">{market.badge}</span>}{market.category}</h2>
+          <div key={market.id} className="terminal-card" style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 'bold', color: c.text, marginBottom: 10, letterSpacing: 1 }}>
+              {market.badge && <span style={{ marginRight: 6 }}>{market.badge}</span>}
+              ╔══ {market.category.toUpperCase()} ══╗
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead><tr className="text-xs text-gray-500 border-b border-[#30363D]">
-                  <th className="text-left py-2 px-3">{market.id === 2 || market.id === 3 ? 'Player' : 'Entry'}</th>
-                  <th className="text-left py-2 px-3">Nation</th>
-                  <th className="text-right py-2 px-3">
-                    <Tooltip text="UK (Fractional) odds: 9/2 means you win £9 for every £2 bet. Example: bet ₪10 on 5/1 → win ₪50 + get your ₪10 back = ₪60 total.">UK 🇬🇧</Tooltip>
-                  </th>
-                  <th className="text-right py-2 px-3">
-                    <Tooltip text="US (Moneyline) odds: +450 means bet $100 to win $450. -200 means bet $200 to win $100. + = underdog (big win), - = favorite (safe). Example: +1000 on ₪10 → win ₪100.">US 🇺🇸</Tooltip>
-                  </th>
-                  <th className="text-right py-2 px-3">
-                    <Tooltip text="Implied probability: the market's estimate of how likely this outcome is. 18% means roughly 1 in 5 chance. Higher % = more likely to happen.">Prob</Tooltip>
-                  </th>
-                </tr></thead>
+            <div style={{ overflowX: 'auto' }}>
+              <table className="terminal-table" style={{ fontSize: 12 }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: 'left' }}>{market.id >= 2 && market.id <= 3 ? 'PLAYER' : 'ENTRY'}</th>
+                    <th style={{ textAlign: 'left' }}>NAT</th>
+                    <th style={{ textAlign: 'right' }}>
+                      UK
+                      <Tooltip text="Fractional: 9/2 means win £9 for every £2 bet. Return = stake + winnings." />
+                    </th>
+                    <th style={{ textAlign: 'right' }}>
+                      US MONEYLINE
+                      <Tooltip text="+450 = underdog (bet $100→win $450). -200 = favorite (bet $200→win $100)." />
+                    </th>
+                    <th style={{ textAlign: 'right' }}>
+                      PROB
+                      <Tooltip text="Implied probability from the market. 18% ≈ 1 in 5.5 chance." />
+                    </th>
+                  </tr>
+                </thead>
                 <tbody>
                   {market.entries.map((entry: any, i: number) => {
                     const name = entry.player || entry.team || entry.entry || entry.group || entry.favorite
                     const nation = entry.nation || entry.group || entry.fifa_code || ''
-                    const ml = entry.moneyline; const isFav = ml && ml.startsWith('-')
+                    const ml = entry.moneyline
+                    const isFav = ml && ml.startsWith('-')
                     const prob = entry.probability_pct
                     return (
-                      <tr key={i} className="border-b border-[#21262D] hover:bg-[#1C2129] transition-colors">
-                        <td className="py-2.5 px-3 font-medium">{isFav && <span className="text-green-400 mr-1">★</span>}{name}</td>
-                        <td className="py-2.5 px-3 text-gray-400">{nation}</td>
-                        <td className="py-2.5 px-3 text-right font-mono text-vegas-gold relative group">
-                          {entry.fractional}
-                          <OddsTooltip uk={entry.fractional} ml={ml} prob={prob} name={name} />
+                      <tr key={i}>
+                        <td style={{ textAlign: 'left', color: '#88cc88' }}>
+                          {isFav && <span style={{ color: '#00cc44', marginRight: 4 }}>★</span>}
+                          {name}
                         </td>
-                        <td className={`py-2.5 px-3 text-right font-mono font-bold relative group ${isFav ? 'text-green-400' : 'text-red-400'}`}>
-                          {ml}
-                          <OddsTooltip uk={entry.fractional} ml={ml} prob={prob} name={name} />
-                        </td>
-                        <td className="py-2.5 px-3 text-right text-gray-400">
-                          {entry.type || prob ? (prob ? `${prob}%` : entry.type) : '—'}
+                        <td style={{ textAlign: 'left', color: '#446644', fontSize: 11 }}>{nation}</td>
+                        <td style={{ textAlign: 'right', color: '#ffb000', fontFamily: 'inherit' }}>{entry.fractional}</td>
+                        <td style={{ textAlign: 'right', fontFamily: 'inherit', fontWeight: 'bold', color: isFav ? '#00cc44' : '#ff6666' }}>{ml}</td>
+                        <td style={{ textAlign: 'right', color: '#446644' }}>
+                          {entry.type || prob ? (prob ? `${prob}%` : entry.type) : '--'}
                         </td>
                       </tr>
                     )
@@ -98,51 +114,40 @@ export default function Betting({ trumpMode }: { trumpMode: boolean }) {
           </div>
         ))}
 
-        {trumpMode && (
-          <div className="card text-center py-8 border-trump-gold/50">
-            <div className="text-4xl mb-4">🇺🇸</div>
-            <h2 className="text-2xl font-bold mb-2" style={{ color: '#FFD700' }}>250 YEARS OF WINNING!</h2>
-            <p className="text-gray-400 mb-4 max-w-lg mx-auto">America turns 250 on July 4, 2026 — right in the middle of the World Cup. Make Soccer Great Again!</p>
-            <div className="text-4xl font-black" style={{ color: '#BF0A30' }}>USA! USA! USA!</div>
-          </div>
-        )}
+        <div style={{ textAlign: 'center', color: '#003300', fontSize: 10, marginTop: 24 }}>
+          ╔══════════════════════════════════════╗<br />
+          ║  :help for odds explanation  ║<br />
+          ╚══════════════════════════════════════╝
+        </div>
+
       </div>
     </div>
   )
 }
 
-function Tooltip({ children, text }: { children: React.ReactNode; text: string }) {
+function Tooltip({ text }: { text: string }) {
   return (
-    <span className="relative group inline-flex items-center gap-1">
-      {children}
-      <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-vegas-gold/20 text-[10px] text-vegas-gold cursor-help font-sans">?</span>
-      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-[#1a1f2e] border border-vegas-gold/40 rounded text-xs text-gray-300 w-64 text-left leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none shadow-xl">
+    <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 2 }}>
+      <span style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        width: 14, height: 14, borderRadius: '50%',
+        background: 'rgba(0,204,68,0.1)', color: '#00cc44',
+        fontSize: 9, cursor: 'help',
+      }}>?</span>
+      <span style={{
+        position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
+        marginBottom: 6, padding: '6px 10px',
+        background: '#0f1a0f', border: '1px solid #1a3a1a',
+        fontSize: 10, color: '#668844', width: 260, textAlign: 'left',
+        opacity: 0, visibility: 'hidden', transition: 'all 0.15s', zIndex: 50,
+        pointerEvents: 'none',
+        fontFamily: 'inherit', fontWeight: 'normal', letterSpacing: '0',
+      }}
+        className="tooltip-hover"
+      >
         {text}
       </span>
-    </span>
-  )
-}
-
-function OddsTooltip({ uk, ml, prob, name }: { uk: string; ml: string; prob?: number; name: string }) {
-  const isFav = ml && ml.startsWith('-')
-  const num = parseFloat(ml?.replace(/[+-]/, '') || '0')
-
-  let explanation = ''
-  if (isFav) {
-    explanation = `${name} is the favorite. You must bet $${num} to win $100.`
-  } else {
-    explanation = `${name} is an underdog. Bet $100 to win $${num}.`
-  }
-  if (prob) {
-    explanation += ` About ${prob}% chance.`
-  }
-  if (uk && !isFav) {
-    explanation += ` UK: ${uk}.`
-  }
-
-  return (
-    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-[#1a1f2e] border border-vegas-gold/30 rounded text-[10px] text-gray-300 w-56 text-center opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 pointer-events-none whitespace-normal shadow-xl">
-      {explanation}
+      <style>{`.tooltip-hover, span:hover > .tooltip-hover { opacity: 1 !important; visibility: visible !important; }`}</style>
     </span>
   )
 }
