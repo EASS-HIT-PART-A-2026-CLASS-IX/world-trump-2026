@@ -1,0 +1,27 @@
+{
+  "title": "USA 250th - Semiquincentennial",
+  "date": "July 4, 2026",
+  "description": "250 years of American independence, celebrated alongside the 2026 FIFA World Cup on home soil.",
+  "facts": [
+    {"id": 1, "colony": "Delaware", "year": 1787, "fact": "First state to ratify the Constitution — December 7, 1787. Hosting World Cup watch parties in Wilmington."},
+    {"id": 2, "colony": "Pennsylvania", "year": 1787, "fact": "Birthplace of the Declaration of Independence and the Constitution. Philadelphia's Lincoln Financial Field hosts knockout matches."},
+    {"id": 3, "colony": "New Jersey", "year": 1787, "fact": "Third to ratify. MetLife Stadium — the FINAL venue — sits in East Rutherford, NJ. The biggest game on the biggest birthday."},
+    {"id": 4, "colony": "Georgia", "year": 1788, "fact": "Peach State hosts World Cup quarterfinals at Mercedes-Benz Stadium in Atlanta."},
+    {"id": 5, "colony": "Connecticut", "year": 1788, "fact": "The Constitution State. Gillette Stadium in nearby Foxborough, MA hosts quarterfinal action."},
+    {"id": 6, "colony": "Massachusetts", "year": 1788, "fact": "Home of the American Revolution. Gillette Stadium brings World Cup fever to New England."},
+    {"id": 7, "colony": "Maryland", "year": 1788, "fact": "Star-Spangled Banner state. Close to Philadelphia's knockout matches at Lincoln Financial Field."},
+    {"id": 8, "colony": "South Carolina", "year": 1788, "fact": "Palmetto State. Fans travel up to Atlanta for quarterfinal action at Mercedes-Benz Stadium."},
+    {"id": 9, "colony": "New Hampshire", "year": 1788, "fact": "Live Free or Die. Ninth to ratify, hosting watch parties across the Granite State."},
+    {"id": 10, "colony": "Virginia", "year": 1788, "fact": "Old Dominion — home of presidents. A short drive to DC watch parties and Philadelphia matches."},
+    {"id": 11, "colony": "New York", "year": 1788, "fact": "Empire State. The FINAL at MetLife is practically a home game for NYC — the biggest event in American soccer history."},
+    {"id": 12, "colony": "North Carolina", "year": 1789, "fact": "Tar Heel State. First in flight, first in World Cup fan zones from Charlotte to Raleigh."},
+    {"id": 13, "colony": "Rhode Island", "year": 1790, "fact": "Little Rhody — last of the 13 to ratify, first in World Cup passion per square mile."}
+  ],
+  "trump_facts": [
+    "President Donald J. Trump will personally welcome all 48 teams to the greatest World Cup in history.",
+    "The 250th birthday of the USA and the World Cup — two HUGE wins, folks. Nobody does events like us.",
+    "MetLife Stadium — right across the river from Trump Tower — will host the BIGGEST final ever.",
+    "America First on the pitch. The USMNT is ready to make soccer GREAT again.",
+    "250 years of winning. Add a World Cup trophy. That's what I call a tremendous celebration."
+  ]
+}

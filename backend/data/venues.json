@@ -1,0 +1,18 @@
+[
+  {"id": 1, "name": "MetLife Stadium", "city": "East Rutherford", "state": "NJ", "country": "USA", "capacity": 82500, "lat": 40.8136, "lon": -74.0745, "type": "Final", "matches": ["Final", "Semi 1", "Group H-1"]},
+  {"id": 2, "name": "AT&T Stadium", "city": "Arlington", "state": "TX", "country": "USA", "capacity": 80000, "lat": 32.7473, "lon": -97.0945, "type": "Semi", "matches": ["Semi 2", "Group E-1"]},
+  {"id": 3, "name": "SoFi Stadium", "city": "Inglewood", "state": "CA", "country": "USA", "capacity": 70000, "lat": 33.9535, "lon": -118.3391, "type": "Quarter", "matches": ["Quarter 1", "Group A-1", "R32-1"]},
+  {"id": 4, "name": "Mercedes-Benz Stadium", "city": "Atlanta", "state": "GA", "country": "USA", "capacity": 71000, "lat": 33.7553, "lon": -84.4011, "type": "Quarter", "matches": ["Quarter 2", "Group C-1", "R32-3"]},
+  {"id": 5, "name": "Hard Rock Stadium", "city": "Miami Gardens", "state": "FL", "country": "USA", "capacity": 65326, "lat": 25.9580, "lon": -80.2389, "type": "Quarter", "matches": ["Quarter 3", "Group F-1", "R32-5"]},
+  {"id": 6, "name": "Gillette Stadium", "city": "Foxborough", "state": "MA", "country": "USA", "capacity": 65878, "lat": 42.0909, "lon": -71.2643, "type": "Quarter", "matches": ["Quarter 4", "Group D-1", "R32-7"]},
+  {"id": 7, "name": "Lincoln Financial Field", "city": "Philadelphia", "state": "PA", "country": "USA", "capacity": 69579, "lat": 39.9008, "lon": -75.1675, "type": "Round of 16", "matches": ["R16-1", "Group L-1", "R32-9"]},
+  {"id": 8, "name": "NRG Stadium", "city": "Houston", "state": "TX", "country": "USA", "capacity": 72220, "lat": 29.6847, "lon": -95.4107, "type": "Round of 16", "matches": ["R16-2", "Group J-1", "R32-11"]},
+  {"id": 9, "name": "Arrowhead Stadium", "city": "Kansas City", "state": "MO", "country": "USA", "capacity": 76416, "lat": 39.0489, "lon": -94.4840, "type": "Round of 16", "matches": ["R16-3", "Group B-1", "R32-13"]},
+  {"id": 10, "name": "Levi's Stadium", "city": "Santa Clara", "state": "CA", "country": "USA", "capacity": 68500, "lat": 37.4030, "lon": -121.9695, "type": "Round of 16", "matches": ["R16-4", "Group K-1", "R32-15"]},
+  {"id": 11, "name": "Lumen Field", "city": "Seattle", "state": "WA", "country": "USA", "capacity": 68740, "lat": 47.5952, "lon": -122.3316, "type": "Group", "matches": ["Group G-1", "Group P-1", "R32-2"]},
+  {"id": 12, "name": "Estadio Azteca", "city": "Mexico City", "state": "CDMX", "country": "Mexico", "capacity": 87523, "lat": 19.3029, "lon": -99.1504, "type": "Opening", "matches": ["Opening Match", "Group A-2", "R16-5"]},
+  {"id": 13, "name": "Estadio BBVA", "city": "Monterrey", "state": "NL", "country": "Mexico", "capacity": 53500, "lat": 25.6697, "lon": -100.2511, "type": "Group", "matches": ["Group B-2", "R32-4"]},
+  {"id": 14, "name": "Estadio Akron", "city": "Zapopan", "state": "JAL", "country": "Mexico", "capacity": 49850, "lat": 20.6820, "lon": -103.4628, "type": "Group", "matches": ["Group D-2", "R32-6"]},
+  {"id": 15, "name": "BC Place", "city": "Vancouver", "state": "BC", "country": "Canada", "capacity": 54500, "lat": 49.2768, "lon": -123.1120, "type": "Group", "matches": ["Group C-2", "R32-8"]},
+  {"id": 16, "name": "BMO Field", "city": "Toronto", "state": "ON", "country": "Canada", "capacity": 45000, "lat": 43.6327, "lon": -79.4185, "type": "Group", "matches": ["Group E-2", "R32-10", "Third Place"]}
+]

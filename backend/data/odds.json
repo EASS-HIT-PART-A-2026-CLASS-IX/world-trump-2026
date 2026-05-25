@@ -1,0 +1,98 @@
+{
+  "markets": [
+    {
+      "id": 1,
+      "category": "Outright Winner",
+      "entries": [
+        {"team": "Spain", "fifa_code": "ESP", "fractional": "9/2", "moneyline": "+450", "probability_pct": 18},
+        {"team": "France", "fifa_code": "FRA", "fractional": "5/1", "moneyline": "+500", "probability_pct": 16},
+        {"team": "England", "fifa_code": "ENG", "fractional": "6/1", "moneyline": "+600", "probability_pct": 14},
+        {"team": "Brazil", "fifa_code": "BRA", "fractional": "8/1", "moneyline": "+800", "probability_pct": 11},
+        {"team": "Argentina", "fifa_code": "ARG", "fractional": "8/1", "moneyline": "+800", "probability_pct": 11},
+        {"team": "Portugal", "fifa_code": "POR", "fractional": "10/1", "moneyline": "+1000", "probability_pct": 9},
+        {"team": "Germany", "fifa_code": "GER", "fractional": "14/1", "moneyline": "+1400", "probability_pct": 7},
+        {"team": "Netherlands", "fifa_code": "NED", "fractional": "20/1", "moneyline": "+2000", "probability_pct": 5},
+        {"team": "Norway", "fifa_code": "NOR", "fractional": "25/1", "moneyline": "+2500", "probability_pct": 4},
+        {"team": "Belgium", "fifa_code": "BEL", "fractional": "33/1", "moneyline": "+3300", "probability_pct": 3},
+        {"team": "Colombia", "fifa_code": "COL", "fractional": "40/1", "moneyline": "+4000", "probability_pct": 2.5},
+        {"team": "USA", "fifa_code": "USA", "fractional": "66/1", "moneyline": "+6600", "probability_pct": 1.5},
+        {"team": "Mexico", "fifa_code": "MEX", "fractional": "80/1", "moneyline": "+8000", "probability_pct": 1.2},
+        {"team": "Morocco", "fifa_code": "MAR", "fractional": "100/1", "moneyline": "+10000", "probability_pct": 1},
+        {"team": "Uruguay", "fifa_code": "URU", "fractional": "125/1", "moneyline": "+12500", "probability_pct": 0.8}
+      ]
+    },
+    {
+      "id": 2,
+      "category": "Golden Boot (Top Goalscorer)",
+      "entries": [
+        {"player": "Kylian Mbappe", "nation": "France", "fractional": "6/1", "moneyline": "+600"},
+        {"player": "Harry Kane", "nation": "England", "fractional": "7/1", "moneyline": "+700"},
+        {"player": "Erling Haaland", "nation": "Norway", "fractional": "10/1", "moneyline": "+1000"},
+        {"player": "Lionel Messi", "nation": "Argentina", "fractional": "12/1", "moneyline": "+1200"},
+        {"player": "Lamine Yamal", "nation": "Spain", "fractional": "14/1", "moneyline": "+1400"},
+        {"player": "Cristiano Ronaldo", "nation": "Portugal", "fractional": "18/1", "moneyline": "+1800"},
+        {"player": "Vinicius Jr", "nation": "Brazil", "fractional": "20/1", "moneyline": "+2000"},
+        {"player": "Jude Bellingham", "nation": "England", "fractional": "25/1", "moneyline": "+2500"},
+        {"player": "Christian Pulisic", "nation": "USA", "fractional": "100/1", "moneyline": "+10000"},
+        {"player": "Son Heung-min", "nation": "South Korea", "fractional": "80/1", "moneyline": "+8000"}
+      ]
+    },
+    {
+      "id": 3,
+      "category": "Golden Ball (Tournament MVP)",
+      "entries": [
+        {"player": "Kylian Mbappe", "nation": "France", "fractional": "8/1", "moneyline": "+800"},
+        {"player": "Lamine Yamal", "nation": "Spain", "fractional": "10/1", "moneyline": "+1000"},
+        {"player": "Harry Kane", "nation": "England", "fractional": "10/1", "moneyline": "+1000"},
+        {"player": "Lionel Messi", "nation": "Argentina", "fractional": "12/1", "moneyline": "+1200"},
+        {"player": "Jude Bellingham", "nation": "England", "fractional": "14/1", "moneyline": "+1400"},
+        {"player": "Vinicius Jr", "nation": "Brazil", "fractional": "16/1", "moneyline": "+1600"},
+        {"player": "Martin Odegaard", "nation": "Norway", "fractional": "25/1", "moneyline": "+2500"},
+        {"player": "Christian Pulisic", "nation": "USA", "fractional": "150/1", "moneyline": "+15000"}
+      ]
+    },
+    {
+      "id": 4,
+      "category": "USA Props (Trump's America Markets)",
+      "badge": "🇺🇸 MAGA SPECIAL",
+      "entries": [
+        {"entry": "USA reaches Round of 16", "fractional": "4/5", "moneyline": "-125", "type": "Yes"},
+        {"entry": "USA reaches Quarterfinals", "fractional": "4/1", "moneyline": "+400", "type": "Yes"},
+        {"entry": "USA wins Group", "fractional": "3/1", "moneyline": "+300", "type": "Yes"},
+        {"entry": "Trump attends Final at MetLife", "fractional": "1/10", "moneyline": "-1000", "type": "Yes"},
+        {"entry": "Trump tweets about USMNT during tournament", "fractional": "1/20", "moneyline": "-2000", "type": "Yes"},
+        {"entry": "Opening Ceremony features bald eagle flyover", "fractional": "1/5", "moneyline": "-500", "type": "Yes"},
+        {"entry": "Total goals in tournament OVER 300", "fractional": "Evens", "moneyline": "+100", "type": "Over"},
+        {"entry": "Any host nation wins the World Cup", "fractional": "25/1", "moneyline": "+2500", "type": "Yes"}
+      ]
+    },
+    {
+      "id": 5,
+      "category": "Group Winner Specials",
+      "entries": [
+        {"group": "A", "favorite": "USA", "fractional": "2/1", "moneyline": "+200"},
+        {"group": "B", "favorite": "Canada", "fractional": "5/2", "moneyline": "+250"},
+        {"group": "C", "favorite": "Argentina", "fractional": "1/4", "moneyline": "-400"},
+        {"group": "D", "favorite": "France", "fractional": "1/3", "moneyline": "-300"},
+        {"group": "E", "favorite": "Brazil", "fractional": "1/2", "moneyline": "-200"},
+        {"group": "F", "favorite": "England", "fractional": "1/3", "moneyline": "-300"},
+        {"group": "G", "favorite": "Spain", "fractional": "1/5", "moneyline": "-500"},
+        {"group": "H", "favorite": "Germany", "fractional": "1/2", "moneyline": "-200"},
+        {"group": "I", "favorite": "Portugal", "fractional": "1/4", "moneyline": "-400"},
+        {"group": "J", "favorite": "Netherlands", "fractional": "1/3", "moneyline": "-300"},
+        {"group": "K", "favorite": "Belgium", "fractional": "1/2", "moneyline": "-200"},
+        {"group": "L", "favorite": "Croatia", "fractional": "1/1", "moneyline": "+100"}
+      ]
+    },
+    {
+      "id": 6,
+      "category": "Venue Specials",
+      "badge": "🏟️ STADIUM PROPS",
+      "entries": [
+        {"entry": "Total attendance exceeds 5 million", "fractional": "1/3", "moneyline": "-300"},
+        {"entry": "MetLife Stadium sells out all matches", "fractional": "1/8", "moneyline": "-800"},
+        {"entry": "Any match played in snow (Canada)", "fractional": "50/1", "moneyline": "+5000"}
+      ]
+    }
+  ]
+}
